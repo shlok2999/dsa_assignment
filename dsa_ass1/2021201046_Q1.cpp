@@ -175,10 +175,75 @@ string multiply(string num1,string num2)
     return ans;
 }
 
+string factorial(string num)
+{
+    if(num=="0" || num=="1")
+        return "1";
+    string ans="1";
+    while(!(num=="1"))
+    {
+        ans=multiply(ans,num);
+        num=subtract(num,"1");
+    }
+
+    return ans;
+}
+
+string expo(string num, long long int power )
+{
+    if(power==1)
+        return num;
+    string ans="1";
+    while(power>0)
+    {
+        if(power%2)
+            ans=multiply(ans,num);
+        power=power/2;
+        num=multiply(num,num);
+    }
+
+    return ans;
+}
+
+bool greater_than(string num1,string num2)
+{
+    if(num1.length()>num2.length())
+        return true;
+    else if(num1.length()<num2.length())
+        return false;
+    else
+    {
+        int n=num1.length();
+        for(int i=0;i<n;i++)
+        {
+            if(num1[i]<num2[i])
+                return false;
+            else if(num2[i]<num1[i])
+                return true;
+        }
+        return true;
+    }
+}
+
+string gcd(string num1,string num2)
+{
+    if(num1==num2)
+        return num1;
+    while(!(num1==num2))
+    {
+        if(greater_than(num1,num2))
+            num1=subtract(num1,num2);
+        else
+            num2=subtract(num2,num1);
+    }
+
+    return num1;
+}
+
 int main()
 {
     
     //cout<<"hello";
-    string ans=multiply("11","22");
+    string ans=expo("2",10);
     cout<<ans;
 }
