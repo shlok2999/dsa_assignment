@@ -240,10 +240,107 @@ string gcd(string num1,string num2)
     return num1;
 }
 
+int priority(char ch)
+{
+    if(ch == '*')
+        return 1;
+    else
+        return 0;
+}
+
+
+string calculator(string expr)
+{
+    //The below code is for postfix notation
+    int n=expr.length();
+    string token[n];//Contain Postfix notation
+    for(int i=0;i<n;i++)
+        token[i]="";
+    char stk1[n];
+    int top=-1;
+    int len=0;
+    
+    for(char ch:expr)
+    {
+        
+        if(isdigit(ch))
+            token[len]+=ch;
+        else
+        {
+            len++;
+            if(top==-1)
+                stk1[++top]=ch;
+            else if(priority(stk1[top])<priority(ch))
+                stk1[++top]=ch;
+            else
+            {
+                while(priority(stk1[top])>=priority(ch) && top!=-1)
+                {
+                    token[len]+=stk1[top];
+                    len++;
+                    top--;
+                }
+                stk1[++top]=ch;
+            }
+        }
+    }
+    if(top!=-1)
+    {
+        len++;
+        while(top!=-1)
+        {
+            token[len]+=stk1[top];
+            len++;
+            top--;
+        }
+    }
+    /*
+    for(int i=0;i<=len;i++)
+    {
+        cout<<token[i]<<endl;
+    }
+    */
+    //Here we will solve the question
+    string stk2[len+1];
+    top=-1;
+    for(int i=0;i<=len;i++)
+    {
+        if(token[i]=="+")
+        {
+            string res= add(stk2[top-1],stk2[top]);
+            top--;
+            stk2[top]=res;
+            
+        }
+        else if(token[i]=="-")
+        {
+            string res= subtract(stk2[top-1],stk2[top]);
+            
+            top--;
+            stk2[top]=res;
+            
+        }
+        else if(token[i]=="*")
+        {
+            string res= multiply(stk2[top-1],stk2[top]);
+            top--;
+            stk2[top]=res;
+        }
+        else
+        {
+            stk2[++top]=token[i];
+        }
+    }
+    return stk2[0];
+}
+
+
+
+
 int main()
 {
     
     //cout<<"hello";
-    string ans=expo("2",10);
+    string ans=calculator("23+245*43-80");
     cout<<ans;
 }
