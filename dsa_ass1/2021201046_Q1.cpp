@@ -242,7 +242,7 @@ string gcd(string num1,string num2)
 
 int priority(char ch)
 {
-    if(ch == '*')
+    if(ch == 'x')
         return 1;
     else
         return 0;
@@ -320,7 +320,7 @@ string calculator(string expr)
             stk2[top]=res;
             
         }
-        else if(token[i]=="*")
+        else if(token[i]=="x")
         {
             string res= multiply(stk2[top-1],stk2[top]);
             top--;
