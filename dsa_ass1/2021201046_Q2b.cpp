@@ -43,34 +43,72 @@ class fn
     }
 };
 
-class LFU
-{
+
+class LFUCache {
     int capacity;
     int size;
     fn *head;
     unordered_map<int,frame*> umap;
-    public:
-    LFU(int n)
-    {
+public:
+    LFUCache(int n) {
         capacity=n;
         size=0;
         head=NULL;
+        
     }
-
-    int get(int key)
+    
+    void add(fn *parent,frame *node)
     {
-        if(umap.find(key)==umap.end())
+        node->parent=parent;
+        node->next=NULL;
+        if(parent->head==NULL)
+        {
+            parent->head=node;
+            parent->tail=node;
+            node->prev=NULL;
+            return;
+        }
+        node->prev=parent->tail;
+        parent->tail->next=node;
+        parent->tail=node;
+    }
+    
+    void del(fn *node)
+    {
+        fn *tp=node->prev;
+        fn *tn=node->next;
+        if(tp)
+        {
+            tp->next=tn;
+        }
+        else
+        {
+            head=tn;
+        }
+        if(tn)
+        {
+            tn->prev=tp;
+        }
+        delete node;
+    }
+    
+    int get(int key) {
+        
+        if(umap.find(key)==umap.end() || capacity==0)
             return -1;
         else
         {
+           // cout<<3;
             frame *temp=umap[key];
             fn *parent=temp->parent;
             frame *tp=temp->prev;
             frame *tn=temp->next;
+            //cout<<parent;
             if(parent->next!=NULL && parent->next->freq==parent->freq+1)
             {
-                //add(parent->next,temp);
+                add(parent->next,temp);
             }
+            
             else
             {
                 if(parent->next==NULL)
@@ -78,23 +116,25 @@ class LFU
                     fn *t=new fn(parent->freq+1);
                     t->prev=parent;
                     parent->next=t;
-                    //add(t,temp);
+                    add(t,temp);
                 }
                 else
                 {
                     fn *t=new fn(parent->freq+1);
                     t->prev=parent;
                     t->next=parent->next;
+                    parent->next->prev=t;
                     parent->next=t;
-                    //add(t,temp);
+                    add(t,temp);
                 }
             }
-
+    //cout<<3;
             if(tp==NULL && tn==NULL)
             {
-                //del(parent);
+                del(parent);
                 return temp->value;
             }
+            //cout<<3;
             if(tp)
             {
                 tp->next=tn;
@@ -111,20 +151,26 @@ class LFU
             {
                 parent->tail=tp;
             }
+            //cout<<" "<<temp->parent->freq<<" ";
             return temp->value;
         }
+        
     }
-
-
-
-    void set(int key, int value)
-    {
+    
+    void set(int key, int value) {
+        
+        if(capacity==0)
+            return;
+        
         if(head==NULL)
         {
+            //cout<<"1";
             head=new fn(1);
             frame *node=new frame(key,value);
+            umap[key]=node;
             head->head=node;
             head->tail=node;
+            node->parent=head;
             size++;
         }
         else if(umap.find(key)!=umap.end())
@@ -136,7 +182,7 @@ class LFU
             frame *tn=temp->next;
             if(parent->next!=NULL && parent->next->freq==parent->freq+1)
             {
-                //add(parent->next,temp);
+                add(parent->next,temp);
             }
             else
             {
@@ -145,21 +191,22 @@ class LFU
                     fn *t=new fn(parent->freq+1);
                     t->prev=parent;
                     parent->next=t;
-                    //add(t,temp);
+                    add(t,temp);
                 }
                 else
                 {
                     fn *t=new fn(parent->freq+1);
                     t->prev=parent;
                     t->next=parent->next;
+                    parent->next->prev=t;
                     parent->next=t;
-                    //add(t,temp);
+                    add(t,temp);
                 }
             }
 
             if(tp==NULL && tn==NULL)
             {
-                //del(parent);
+                del(parent);
                 return;
             }
             if(tp)
@@ -182,10 +229,13 @@ class LFU
         }
         else if(size<capacity)
         {
+            //cout<<2;
+            size++;
             frame *node=new frame(key,value);
+            umap[key]=node;
             if(head->freq==1)
             {
-                //add(head,node);
+                add(head,node);
             }
             else
             {
@@ -193,41 +243,53 @@ class LFU
                 temp->next=head;
                 head->prev=temp;
                 head=temp;
-                //add(head,node);
+                add(head,node);
             }
         }
 
         else
         {
+            //cout<<4;
             frame *node=new frame(key,value);
+            umap[key]=node;
+            //cout<<key<<" "<<umap[key];
             if(head->freq==1)
             {
-                //add(head,node);
+                
                 frame *temp=head->head;
+                umap.erase(temp->key);
                 temp=temp->next;
                 delete head->head;
+                if(temp)
+                    temp->prev=NULL;
                 head->head=temp;
+                add(head,node);
             }
             else
             {
                 fn *h=new fn(1);
                 h->next=head;
                 head->prev=h;
-                //add(h,node);
+                add(h,node);
                 frame *h1=head->head;
                 frame *temp=h1;
+                umap.erase(temp->key);
                 h1=h1->next;
+                if(h1)
+                h1->prev=NULL;
                 delete temp;
                 head->head=h1;
                 head=h;
                 if(h1==NULL)
                 {
-                    delete(head->next);
+                    del(head->next);
                 }
             }
         }
     }
 };
+
+        
 
 int main()
 {
