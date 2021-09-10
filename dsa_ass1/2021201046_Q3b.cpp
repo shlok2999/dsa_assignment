@@ -94,7 +94,8 @@ int partition(T mat[][3], int start, int end)
     {
         if(mat[i][0]< mat[pivot][0])
         {
-            int td,tc,tr;
+            int tc,tr;
+            T td;
             td=mat[i][2];
             tc=mat[i][1];
             tr=mat[i][0];
@@ -127,7 +128,8 @@ int partition(T mat[][3], int start, int end)
     if(p!=start)
     {
         int i=start;
-        int td,tc,tr;
+        int tc,tr;
+        T td;
         td=mat[i][2];
         tc=mat[i][1];
         tr=mat[i][0];
