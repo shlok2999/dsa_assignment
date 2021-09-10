@@ -197,7 +197,7 @@ void add(matrix *mat1[],int row1,int col1,matrix *mat2[],int row2,int col2)
     }
 }
 
-void sparsell()
+void sparsell2()
 {
     int row,col;
     cout<<"Enter Rows:";
@@ -275,6 +275,52 @@ void sparsell()
         }
     }
     */
+}
+
+void sparsell()
+{
+    int row,col;
+    cout<<"Enter Rows:";
+    cin>>row;
+    cout<<"Enter Colunms:";
+    cin>>col;
+    cout<<"Enter Matrix:\n";
+    matrix *mat[row];
+    for(int i=0;i<row;i++)
+        mat[i]=NULL;
+    matrix *tail;
+    for(int i=0;i<row;i++)
+    {   
+        for(int j=0;j<col;j++)
+        {
+            T temp;
+            cin>>temp;
+            if(temp==0)
+                continue;
+            matrix *node=new matrix;
+            node->next=NULL;
+            node->col=j;
+            node->val=temp;
+            if(mat[i]==NULL)
+                mat[i]=node;
+            else
+                tail->next=node;
+            tail=node;
+        }
+    }
+
+    matrix **mat1=transpose(mat,row,col);
+    cout<<"Transpose of matrix is:\n";
+    
+    for(int i=0;i<col;i++)
+    {
+        matrix *head=mat1[i];
+        while(head!=NULL)
+        {
+            cout<<i<<" "<<head->col<<" "<<head->val<<endl;
+            head=head->next;
+        }
+    }
 }
 };
 
