@@ -398,6 +398,37 @@ int main()
     
     //cout<<"hello";
     //string ans=calculator("23+245*43-80");
-    string ans=gcd("1","0");
+    //string ans=gcd("1","0");
+    //cout<<ans;
+    string ans="";
+    int option;
+    cin>>option;
+    if(option==1)
+    {
+        string base;
+        long long int power;
+        cin>>base;
+        cin>>power;
+        ans=expo(base,power);
+    }
+    else if(option==2)
+    {
+        string num1,num2;
+        cin>>num1;
+        cin>>num2;
+        ans=gcd(num1,num2);
+    }
+    else if(option==3)
+    {
+        string num;
+        cin>>num;
+        ans=factorial(num);
+    }
+    else
+    {
+        string expr;
+        cin>>expr;
+        ans=calculator(expr);
+    }
     cout<<ans;
 }
