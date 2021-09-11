@@ -55,6 +55,8 @@ void add(T mat1[][3],int len1,int row1,int col1,T mat2[][3],int len2, int row2,i
             i++;
             j++;
             len++;
+            if(mat[len][2]==0)
+                len--;
         }
     }
 

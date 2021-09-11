@@ -61,6 +61,8 @@ public:
     
     void set(int key, int value) 
     {
+        if(capacity==0)
+            return;
         if(head==NULL)
         {
             frame *node=new frame;

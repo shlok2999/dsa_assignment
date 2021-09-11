@@ -161,6 +161,11 @@ void add(matrix *mat1[],int row1,int col1,matrix *mat2[],int row2,int col2)
                 t2=t2->next;
                 t1=t1->next;
             }
+            if(node->val==0)
+            {
+                delete node;
+                continue;
+            }
 
             if(result[i]==NULL)
                 result[i]=node;

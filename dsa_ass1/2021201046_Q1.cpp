@@ -191,6 +191,8 @@ string factorial(string num)
 
 string expo(string num, long long int power )
 {
+    if(power==0)
+        return "1";
     if(power==1)
         return num;
     string ans="1";
