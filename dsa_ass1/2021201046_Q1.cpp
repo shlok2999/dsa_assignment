@@ -225,19 +225,73 @@ bool greater_than(string num1,string num2)
     }
 }
 
-string gcd(string num1,string num2)
-{
-    if(num1==num2)
-        return num1;
-    while(!(num1==num2))
+
+string mod(string n1, string n2)
+{                       //n1%n2
+    if(n2==n1)
+        return "0";
+    
+    if(greater_than(n2,n1))
+        return n1;
+    
+    int len1=n1.length();
+    int len2=n2.length();
+    while(greater_than(n1,n2))
     {
-        if(greater_than(num1,num2))
-            num1=subtract(num1,num2);
-        else
-            num2=subtract(num2,num1);
+        int tlen=len2;
+        string num1=n1.substr(0,len2);
+        if(num1==n2)
+            num1="0";
+        else if(greater_than(n2,num1) && num1[0]!='0' )
+        {
+            num1+=n1[len2];
+            tlen++;
+        }
+        while(greater_than(num1,n2))
+        {
+            num1=subtract(num1,n2);
+        }
+        if(num1==n2)
+            num1="0";
+        
+        string temp="";
+        if(tlen+1<n1.length())
+            temp=n1.substr(tlen+1);
+        n1=num1+temp;
+    }
+   
+    for(int i=0;i<n1.length();i++)
+    {
+        if(n1[i]!='0')
+            return n1.substr(i);
     }
 
-    return num1;
+    return "0";
+}
+
+
+string gcd(string num1,string num2)
+{
+    if(num1=="0")
+        return num2;
+    if(num2=="0")
+        return num1;
+    //if(num1==num2)
+    //    return num1;
+    string x=num1;
+    string y=num2;
+    
+    while(!(y=="0"))
+    {
+        x=mod(x,y);
+        string temp=y;
+        y=x;
+        x=temp;
+        //cout<<x;
+        //cout<<y;
+    }
+
+    return x;
 }
 
 int priority(char ch)
@@ -341,6 +395,7 @@ int main()
 {
     
     //cout<<"hello";
-    string ans=calculator("23+245*43-80");
+    //string ans=calculator("23+245*43-80");
+    string ans=gcd("1","0");
     cout<<ans;
 }
