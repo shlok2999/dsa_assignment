@@ -19,7 +19,7 @@ class deque{
 
     deque(int n, T x)
     {
-        capacity=INT_MAX;
+        capacity=(1<<16);
         arr= new T[capacity];
         s=n;
         for(int i=0;i<n;i++)
@@ -144,7 +144,21 @@ class deque{
         return arr[index];
     }
 
-
+    void resize(int n,T x)
+    {
+        if(n>=s)
+        {
+            int len=n-s;
+            for(int i=0;i<len;i++)
+                this->push_back(x);
+        }
+        else
+        {
+            int len=s-n;
+            for(int i=0;i<len;i++)
+                this->pop_back();
+        }
+    }
 
 };
 
@@ -157,9 +171,8 @@ int main()
     d.push_back("5");
     d.push_front("1");
     cout<<d.size()<<endl;
-    cout<<d[0]<<" "<<d[2];
-    d.pop_front();
-    d.pop_back();
-    d.pop_back();
+    
+    d.resize(2,"x");
+    cout<<d[0]<<" "<<d.back();
     cout<<endl<<d.size()<<endl;
 }
