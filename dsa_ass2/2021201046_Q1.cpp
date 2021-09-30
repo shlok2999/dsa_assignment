@@ -39,14 +39,14 @@ class AVL{
         if(root == NULL)
             return -1;
         //k=k-root->count;
-        if(k<=0)
+        if(k<0)
             return root->val;
         if(k < root->lc)
             return k_smallest(root->left,k);
         else
         {
             k-=root->lc;
-            if(k<=root->count)
+            if(k<root->count)
                 return root->val;
             else
                 return k_smallest(root->right, k - root->count);
@@ -386,6 +386,25 @@ class AVL{
     {
         Inorder(head);
     }
+///////////////////////////////////////// Counting occurances /////////////////////////////////
+
+    int count_occurrence(node * root,T val)
+    {
+        if(root==NULL)
+            return 0;
+        
+        if(val < root->val)
+            return find(root->left,val);
+        else if(val > root->val)
+            return find(root->right,val);
+        else
+            return root->count;
+    }
+
+    int count_occurrence(T val)
+    {
+        return count_occurrence(head, val);
+    }
 
 };
 
@@ -398,16 +417,17 @@ int main()
     tree.insert(10);
     tree.insert(9);
     tree.insert(1);
-    tree.deletion(11);
+   // tree.deletion(11);
     tree.deletion(9);
-    tree.deletion(11);
+    //tree.deletion(11);
     tree.Inorder();
+    //cout<<tree.count_occurrence(1);
     //cout<<tree.find(12)<<endl;
     //cout<<tree.find(11)<<endl;
     //cout<<tree.find(11)<<endl;
     //cout<<tree.find(10)<<endl;
     //cout<<tree.find(9)<<endl;
     //cout<<tree.find(1)<<endl; 
-    
+    cout<<tree.k_smallest(4);
     //cout<<tree.closest_ele(1);
 }
