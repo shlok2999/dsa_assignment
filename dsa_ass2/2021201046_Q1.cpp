@@ -1,4 +1,5 @@
 #include<iostream>
+#include<climits>
 using namespace std;
 
 
@@ -105,6 +106,14 @@ class AVL{
         root->left=rot_left(root->left);
         root=rot_right(root);
         return root;
+    }
+    
+    T min(T a,T b)
+    {
+        if(a>b)
+            return b;
+        else
+            return a;
     }
 
 ///////////////////////////Insertion//////////////////////////////////////////////////////////////////////
@@ -216,6 +225,167 @@ class AVL{
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////Find Operation //////////////////////////////////////////////////
+    bool find(node * root,T val)
+    {
+        if(root==NULL)
+            return false;
+        
+        if(val < root->val)
+            return find(root->left,val);
+        else if(val > root->val)
+            return find(root->right,val);
+        else
+            return true;
+    }
+    
+    bool find(T val)
+    {
+        return find(head, val);
+    }
+////////////////////////////////////////Closest element///////////////////////////////////////////////
+    T closest_ele(node * root,T val, T ans)
+    {
+        if(root==NULL)
+            return ans;
+        if(abs(root->val-val)<abs(ans-val))
+            ans=root->val;
+        //cout<<ans<<endl;
+        if(val<root->val)
+        {
+            T temp=closest_ele(root->left,val,ans);
+            if(abs(temp-val)<abs(ans-val))
+                ans=temp;
+        }
+        else if(val>root->val)
+        {
+            T temp=closest_ele(root->right,val,ans);
+            if(abs(temp-val)<abs(ans-val))
+                ans=temp;   
+        }
+        
+        return ans;
+    }
+
+    T closest_ele(T val)
+    {
+        T ans=closest_ele(head,val,100);
+        //cout<<head->val<<endl;
+        return ans;
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////Deletion////////////////////////////////////////////////////////
+
+    T find_successor(node * root)
+    {
+        if(root->left==NULL)
+            return root->val;
+        else
+            return find_successor(root->left);
+    }
+
+
+
+    node * deletion(node *root,T val)
+    {
+        if(root==NULL)
+            return root;
+        
+        if(val < root->val)
+        {
+            root->left=deletion(root->left,val);
+            root->lc-=1;
+        }
+        else if(val > root->val)
+        {
+            root->right=deletion(root->right,val);
+            root->rc-=1;
+        }
+
+        else
+        {
+            if(root->count>1)
+            {
+                root->count-=1;
+                return root;
+            }
+
+            if(root->left==NULL && root->right==NULL)
+            {
+                delete root;
+                root=NULL;
+                return root;
+            }
+            else if(root->left!=NULL && root->right==NULL)
+            {
+                node*temp=root->left;
+                delete root;
+                root=temp;
+            }
+
+            else if(root->left==NULL && root->right!=NULL)
+            {
+                node*temp=root->right;
+                delete root;
+                root=temp;
+            }
+
+            else
+            {
+                T ans=find_successor(root->right);
+                root->val=ans;
+                root->right=deletion(root->right,ans);
+                root->rc-=1;
+            }
+        }
+
+        root->height= 1 + max(h(root->left),h(root->right));
+
+        int balance= h(root->left)-h(root->right);
+
+        if(balance > 1)
+        {
+            if(h(root->left)>=0)
+                root=rot_right(root);
+            else
+                root=LR(root);
+        }
+
+        else if(balance<-1)
+        {
+            if(h(root->right)<=0)
+                root=rot_left(root);
+            else
+                root=RL(root);
+        }
+
+        return root;
+    }
+
+    void deletion(T val)
+    {
+        if(find(val))
+        {
+            head=deletion(head,val);
+        }
+    }
+
+///////////////////////////////////// Inorder Traversal /////////////////////////////////////
+    void Inorder(node * root)
+    {
+        if(root==NULL)
+            return;
+        Inorder(root->left);
+        for(int i=0;i<root->count;i++)
+            cout<<root->val<<" ";
+        Inorder(root->right);
+    }
+
+    void Inorder()
+    {
+        Inorder(head);
+    }
 
 };
 
@@ -228,5 +398,16 @@ int main()
     tree.insert(10);
     tree.insert(9);
     tree.insert(1);
-    return 0;
+    tree.deletion(11);
+    tree.deletion(9);
+    tree.deletion(11);
+    tree.Inorder();
+    //cout<<tree.find(12)<<endl;
+    //cout<<tree.find(11)<<endl;
+    //cout<<tree.find(11)<<endl;
+    //cout<<tree.find(10)<<endl;
+    //cout<<tree.find(9)<<endl;
+    //cout<<tree.find(1)<<endl; 
+    
+    //cout<<tree.closest_ele(1);
 }
