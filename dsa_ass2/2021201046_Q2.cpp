@@ -6,6 +6,8 @@ using namespace std;
 #define maxi 100005
 #define mod 10000007
 
+bool flag;
+
 template <class A,class B>
 class unordered_map{
     public:
@@ -127,18 +129,27 @@ class unordered_map{
 
     B operator [] (A key)
     {
+       flag=false
        int index=getkey(key);
         if(arr[index]==NULL)
-            return -1;
+        {
+            B temp;
+            return temp;
+        }
         
         node *p1=arr[index];;
         while(p1!=NULL)
         {
             if(p1->key==key)
+            {
+                flag=true;
                 return p1->val;
+            }
             p1=p1->next;
         }
-        return -1; 
+
+        T temp;
+        return temp; 
     }
 
 
