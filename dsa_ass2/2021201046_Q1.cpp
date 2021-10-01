@@ -305,10 +305,10 @@ class AVL{
 
 //////////////////////////////////////////////Deletion////////////////////////////////////////////////////////
 
-    T find_successor(node * root)
+    node * find_successor(node * root)
     {
         if(root->left==NULL)
-            return root->val;
+            return root;
         else
             return find_successor(root->left);
     }
@@ -333,11 +333,11 @@ class AVL{
 
         else
         {
-            if(root->count>1)
-            {
-                root->count-=1;
-                return root;
-            }
+            //if(root->count>1)
+            //{
+            //    root->count-=1;
+            //    return root;
+            //}
 
             if(root->left==NULL && root->right==NULL)
             {
@@ -361,9 +361,10 @@ class AVL{
 
             else
             {
-                T ans=find_successor(root->right);
-                root->val=ans;
-                root->right=deletion(root->right,ans);
+                node * ans=find_successor(root->right);
+                root->val=ans->val;
+                root->count=ans->count;
+                root->right=deletion(root->right,ans->val);
                 root->rc-=1;
             }
         }
@@ -486,8 +487,8 @@ int main()
     tree.insert(1);
    // tree.deletion(11);
     //tree.deletion(9);
-    //tree.deletion(11);
-    //tree.Inorder();
+    tree.deletion(11);
+    tree.Inorder();
     //cout<<tree.count_occurrence(1);
     //cout<<tree.find(12)<<endl;
     //cout<<tree.find(11)<<endl;
@@ -499,7 +500,7 @@ int main()
     //cout<<tree.closest_ele(1);
     
     //cout<<tree.inrange(13,14);
-    int ans=tree.upper_bound(-1);
-    if(flag)
-        cout<<ans;
+    //int ans=tree.upper_bound(-1);
+    //if(flag)
+    //    cout<<ans;
 }
