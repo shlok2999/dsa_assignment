@@ -146,11 +146,67 @@ class unordered_map{
 
 int main()
 {
+    //unordered_map<int,int> umap;
+    //umap.insert(2,3);
+    //cout<<umap[2];
+    //umap.erase(2);
+    //cout<<umap.find(2);
     unordered_map<int,int> umap;
-    umap.insert(2,3);
-    cout<<umap[2];
-    umap.erase(2);
-    cout<<umap.find(2);
-    
+    int n,i;
+    cout<<"Enter size";
+    cin>>n;
+    int arr[n];
+    cout<<"Enter Array";
+    for(i=0;i<n;i++)
+    {
+        int temp;
+        cin>>temp;
+        arr[i]=temp;
+    }
+    int k;
+    cout<<"Enter k:";
+    cin>>k;
+    int count=0;
+    for(i=0;i<k;i++)
+    {
+        if(umap.find(arr[i]))
+        {
+            int temp=umap[arr[i]];
+            temp++;
+            umap.insert(arr[i],temp);
+        }
+        else
+        {
+            count++;
+            umap.insert(arr[i],1);
+        }
+    }
+    cout<<count<<" ";
+  
+    for(i=k;i<n;i++)
+    {
+        int start=arr[i-k];
+        int val=umap[start];
+        if(val>1)
+            umap.insert(start,val-1);
+        else
+        {
+            umap.erase(start);
+            count--;
+        }
+        if(umap.find(arr[i]))
+        {
+            int temp=umap[arr[i]];
+            temp++;
+            umap.insert(arr[i],temp);
+        }
+        else
+        {
+            count++;
+            umap.insert(arr[i],1);
+        }
+
+        cout<<count<<" ";
+    }    
     return 0;
 }
