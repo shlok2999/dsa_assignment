@@ -405,6 +405,45 @@ class AVL{
     {
         return count_occurrence(head, val);
     }
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////// In Range Function //////////////////////////////////////////////
+
+    void count_less_than_x(node * root,T x, int &count, bool &check)
+    {
+        if(root==NULL)
+            return;
+        if(x > root->val)
+        {
+            count+=(root->lc + root->count);
+            count_less_than_x(root->right,x,count,check);
+        }
+        else if(x == root->val)
+        {
+            count+=(root->lc);
+            check=true;
+            count_less_than_x(root->right,x,count,check);
+        }
+        else
+        {
+            count_less_than_x(root->left,x,count,check);
+        }
+    }
+
+
+    int inrange( T low, T high)
+    {
+        int ll=0,lh=0;
+        bool lowp=false,highp=false;
+        
+        
+        count_less_than_x(head,low,ll,lowp);
+        count_less_than_x(head,high,lh,highp);
+        lh+=(count_occurrence(high)-1);
+        int ans= lh-ll;
+        ans++;
+        return ans;
+    }
 
 };
 
@@ -418,9 +457,9 @@ int main()
     tree.insert(9);
     tree.insert(1);
    // tree.deletion(11);
-    tree.deletion(9);
+    //tree.deletion(9);
     //tree.deletion(11);
-    tree.Inorder();
+    //tree.Inorder();
     //cout<<tree.count_occurrence(1);
     //cout<<tree.find(12)<<endl;
     //cout<<tree.find(11)<<endl;
@@ -428,6 +467,8 @@ int main()
     //cout<<tree.find(10)<<endl;
     //cout<<tree.find(9)<<endl;
     //cout<<tree.find(1)<<endl; 
-    cout<<tree.k_smallest(4);
+    //cout<<tree.k_smallest(5);
     //cout<<tree.closest_ele(1);
+    
+    cout<<tree.inrange(0,13);
 }
