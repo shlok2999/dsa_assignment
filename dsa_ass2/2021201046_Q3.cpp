@@ -2,6 +2,8 @@
 #include<climits>
 
 using namespace std;
+
+bool flag;
 template <typename T>
 class deque{
     T *arr;
@@ -135,20 +137,27 @@ class deque{
 
     T front()
     {
+        flag=false;
         if(s==0)
         {
-            return 0;
+            T temp;
+            return temp;
         }
+        flag=true;
             return arr[start];
     }
 
     T back()
     {
+        flag=false;
         if(s==0)
         {
-            return 0;
+            T temp;
+            return temp;
         }
-            return arr[end];
+        
+        flag=true;
+        return arr[end];
     }
 
     int size()
@@ -158,8 +167,16 @@ class deque{
 
     T operator [] (int n)
     {
-        long long int index=(start+n)%capacity;
-        return arr[index];
+        flag=false;
+        if(n<s)
+        {
+            flag=true;
+            long long int index=(start+n)%capacity;
+            return arr[index];
+        }
+        
+        T temp;
+        return temp;
     }
 
     void resize(int n,T x)
@@ -187,6 +204,12 @@ int main()
 {
     deque<string> d;
     int i=0;
+    
+    string ans=d[0];
+    if(flag)
+            cout<<ans;
+    else
+        cout<<"no";
     d.push_front("4");
     d.push_back("5");
     d.push_front("1");
