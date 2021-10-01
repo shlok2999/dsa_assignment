@@ -10,7 +10,7 @@ class deque{
     public:
     deque()
     {
-        capacity=(1<<16);
+        capacity=(1<<12);
         arr= new T[capacity];
         s=0;
         start=-1;
@@ -19,7 +19,7 @@ class deque{
 
     deque(int n, T x)
     {
-        capacity=(1<<16);
+        capacity=(1<<12);
         arr= new T[capacity];
         s=n;
         for(int i=0;i<n;i++)
@@ -38,17 +38,35 @@ class deque{
         end=-1;
         s=0;
     }
-
     ~deque()
     {
         if(arr)
             clear();
     }
 
+    void amort()
+    {
+        //capacity=capacity<<1;
+        T *temp=new T[capacity*2];
+        int i=0;
+        while(start<=end)
+        {
+            temp[i]=arr[start];
+            start=(start+1)%capacity;
+            i++;
+        }
+        delete[] arr;
+        arr=temp;
+        temp=NULL;
+        start=0;
+        end=s-1;
+        capacity=capacity<<1;
+    }
+
     void push_back(T x)
     {
         if(s==capacity)
-            return;
+            amort();
         if(s==0)
         {
             start=0;
@@ -66,7 +84,7 @@ class deque{
     void push_front(T x)
     {
         if(s==capacity)
-            return;
+            amort();
         if(s==0)
         {
             start=0;
@@ -146,6 +164,8 @@ class deque{
 
     void resize(int n,T x)
     {
+        if(n>capacity)
+            amort();
         if(n>=s)
         {
             int len=n-s;
