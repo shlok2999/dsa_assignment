@@ -3,6 +3,9 @@
 using namespace std;
 
 
+bool flag;
+
+
 template <typename T>
 class AVL{
     class node
@@ -37,17 +40,26 @@ class AVL{
     T k_smallest(node *root, int k)
     {
         if(root == NULL)
-            return -1;
+        {
+            T temp;
+            return temp;
+        }
         //k=k-root->count;
         if(k<0)
+        {
+            flag=true;
             return root->val;
+        }
         if(k < root->lc)
             return k_smallest(root->left,k);
         else
         {
             k-=root->lc;
             if(k<root->count)
+            {
+                flag=true;
                 return root->val;
+            }
             else
                 return k_smallest(root->right, k - root->count);
         }
@@ -56,6 +68,7 @@ class AVL{
 
     T k_smallest(int k)
     {
+        flag=false;
         return k_smallest(head,k);
     }
 //////////////////////////////////////////Useful Functions////////////////////////////////////////////////
@@ -190,12 +203,19 @@ class AVL{
 
     T lower_bound(T val)
     {
+        flag=false;
         node *ans=lower_bound(head,val,NULL);
 
         if(ans)
+        {
+            flag=true;
             return ans->val;
+        }
         else
-            return -1;
+        {
+            T temp;
+            return temp;
+        }
     }
 
     node * upper_bound(node *root,T val,node *ans)
@@ -216,12 +236,18 @@ class AVL{
 
     T upper_bound(T val)
     {
+        flag=false;
         node *ans=upper_bound(head,val,NULL);
-
         if(ans)
+        {
+            flag=true;
             return ans->val;
+        }
         else
-            return -1;
+        {
+            T temp;
+            return temp;
+        }
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -248,6 +274,7 @@ class AVL{
     {
         if(root==NULL)
             return ans;
+        flag=true;
         if(abs(root->val-val)<abs(ans-val))
             ans=root->val;
         //cout<<ans<<endl;
@@ -269,6 +296,7 @@ class AVL{
 
     T closest_ele(T val)
     {
+        flag=false;
         T ans=closest_ele(head,val,100);
         //cout<<head->val<<endl;
         return ans;
@@ -470,5 +498,8 @@ int main()
     //cout<<tree.k_smallest(5);
     //cout<<tree.closest_ele(1);
     
-    cout<<tree.inrange(0,13);
+    //cout<<tree.inrange(13,14);
+    int ans=tree.upper_bound(-1);
+    if(flag)
+        cout<<ans;
 }
