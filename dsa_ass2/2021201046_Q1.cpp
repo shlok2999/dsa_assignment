@@ -5,6 +5,68 @@ using namespace std;
 
 bool flag;
 
+class abc{
+    private:
+    int a;
+    public:
+    abc()
+    {
+        a=0;
+    }
+
+    abc(int x)
+    {
+        a=x;
+    }
+
+    bool operator < (abc const &x)
+    {
+        if(a<x.a)
+        return true;
+        else
+            return false;
+    }
+
+    bool operator > (abc const &x)
+    {
+        if(a>x.a)
+        return true;
+        else
+            return false;
+    }
+
+    bool operator == (abc const &x)
+    {
+        if(a==x.a)
+        return true;
+        else
+            return false;
+    }
+
+    bool operator >= (abc const &x)
+    {
+        if(a>=x.a)
+        return true;
+        else
+            return false;
+    }
+
+    bool operator <= (abc const &x)
+    {
+        if(a<=x.a)
+        return true;
+        else
+            return false;
+    }
+    
+   friend ostream& operator <<(ostream& os, const abc& x);
+};
+
+ ostream& operator <<(ostream& os, const abc& x)
+    {
+        os << x.a;
+        return os;
+    }
 
 template <typename T>
 class AVL{
@@ -478,16 +540,17 @@ class AVL{
 
 int main()
 {
-    AVL<int> tree;
-    tree.insert(12);
-    tree.insert(11);
-    tree.insert(11);
-    tree.insert(10);
-    tree.insert(9);
-    tree.insert(1);
+    AVL<abc> tree;
+    abc a(12),b(12),c(11),d(10);
+    tree.insert(a);
+    tree.insert(b);
+    tree.insert(c);
+    tree.insert(d);
+    //tree.insert(9);
+    //tree.insert(1);
    // tree.deletion(11);
     //tree.deletion(9);
-    tree.deletion(11);
+    tree.deletion(a);
     tree.Inorder();
     //cout<<tree.count_occurrence(1);
     //cout<<tree.find(12)<<endl;
