@@ -99,7 +99,7 @@ class AVL{
         head=NULL;
     }
  /////////////////////Kth smallest////////////////////////////////////////
-    T k_smallest(node *root, int k)
+    T k_largest(node *root, int k)
     {
         if(root == NULL)
         {
@@ -112,26 +112,26 @@ class AVL{
             flag=true;
             return root->val;
         }
-        if(k < root->lc)
-            return k_smallest(root->left,k);
+        if(k < root->rc)
+            return k_largest(root->right,k);
         else
         {
-            k-=root->lc;
+            k-=root->rc;
             if(k<root->count)
             {
                 flag=true;
                 return root->val;
             }
             else
-                return k_smallest(root->right, k - root->count);
+                return k_largest(root->left, k - root->count);
         }
 
     }
 
-    T k_smallest(int k)
+    T k_largest(int k)
     {
         flag=false;
-        return k_smallest(head,k);
+        return k_largest(head,k);
     }
 //////////////////////////////////////////Useful Functions////////////////////////////////////////////////
 
@@ -550,8 +550,8 @@ int main()
     //tree.insert(1);
    // tree.deletion(11);
     //tree.deletion(9);
-    tree.deletion(a);
-    tree.Inorder();
+    //tree.deletion(a);
+   // tree.Inorder();
     //cout<<tree.count_occurrence(1);
     //cout<<tree.find(12)<<endl;
     //cout<<tree.find(11)<<endl;
@@ -559,7 +559,7 @@ int main()
     //cout<<tree.find(10)<<endl;
     //cout<<tree.find(9)<<endl;
     //cout<<tree.find(1)<<endl; 
-    //cout<<tree.k_smallest(5);
+    cout<<tree.k_largest(4);
     //cout<<tree.closest_ele(1);
     
     //cout<<tree.inrange(13,14);
