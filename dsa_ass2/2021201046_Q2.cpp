@@ -1,6 +1,6 @@
 #include<iostream>
 #include<sstream>
-
+#include<vector>
 using namespace std;
 
 #define maxi 100005
@@ -129,11 +129,14 @@ class unordered_map{
 
     B operator [] (A key)
     {
-       flag=false
+       //flag=false
        int index=getkey(key);
         if(arr[index]==NULL)
         {
             B temp;
+            node *temp2=new node(key,temp);
+            temp2->next=arr[index];
+            arr[index]=temp2;
             return temp;
         }
         
@@ -142,27 +145,27 @@ class unordered_map{
         {
             if(p1->key==key)
             {
-                flag=true;
+                //flag=true;
                 return p1->val;
             }
             p1=p1->next;
         }
 
-        T temp;
+        static B temp;
+        node *temp2=new node(key,temp);
+        temp2->next=arr[index];
+        arr[index]=temp2;
         return temp; 
     }
 
 
 };
 
-int main()
+
+vector<int> function()
 {
-    //unordered_map<int,int> umap;
-    //umap.insert(2,3);
-    //cout<<umap[2];
-    //umap.erase(2);
-    //cout<<umap.find(2);
     unordered_map<int,int> umap;
+    vector<int> ans;
     int n,i;
     cout<<"Enter size";
     cin>>n;
@@ -192,7 +195,8 @@ int main()
             umap.insert(arr[i],1);
         }
     }
-    cout<<count<<" ";
+    //cout<<count<<" ";
+    ans.push_back(count);
   
     for(i=k;i<n;i++)
     {
@@ -217,7 +221,28 @@ int main()
             umap.insert(arr[i],1);
         }
 
-        cout<<count<<" ";
-    }    
+        //cout<<count<<" ";
+        ans.push_back(count);
+    }
+
+    return ans;
+}
+
+
+
+int main()
+{
+    //unordered_map<int,int> umap;
+    //umap.insert(2,3);
+    //cout<<umap[2];
+    //umap.erase(2);
+    //cout<<umap.find(2);
+    unordered_map<int,int> umap;
+    vector<int> ans;
+    ans=function();
+    for(int i=0;i<ans.size();i++)
+    {
+        cout<<ans[i]<<"";
+    }        
     return 0;
 }
