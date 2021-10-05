@@ -197,6 +197,15 @@ class deque{
         }
     }
 
+
+    bool empty()
+    {
+        if(s==0)
+            return true;
+        else
+            return false;
+    }
+
     
 
 };
@@ -206,6 +215,7 @@ int main()
 {
     deque<string> d;
     int i=0;
+    cout<<d.empty();
     
     string ans=d[0];
     if(flag)
@@ -220,4 +230,5 @@ int main()
     d.resize(2,"x");
     cout<<d[0]<<" "<<d.back();
     cout<<endl<<d.size()<<endl;
+    cout<<d.empty();
 }
