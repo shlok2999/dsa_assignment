@@ -364,7 +364,7 @@ class AVL{
     T closest_ele(T val)
     {
         flag=false;
-        T ans=closest_ele(head,val,INT_MAX);
+        T ans=closest_ele(head,val,100);
         //cout<<head->val<<endl;
         return ans;
     }
