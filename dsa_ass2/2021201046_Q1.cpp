@@ -19,6 +19,11 @@ class abc{
         a=x;
     }
 
+    abc operator - (abc x)
+    {
+        return a-x.a;
+    }
+
     bool operator < (abc const &x)
     {
         if(a<x.a)

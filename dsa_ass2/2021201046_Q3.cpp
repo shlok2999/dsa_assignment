@@ -197,13 +197,7 @@ class deque{
         }
     }
 
-    bool empty()
-    {
-        if(s==0)
-            return true;
-        else
-            return false;
-    }
+    
 
 };
 
