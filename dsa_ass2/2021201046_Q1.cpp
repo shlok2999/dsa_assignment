@@ -361,10 +361,24 @@ class AVL{
         return ans;
     }
 
+    T find_max(node * root)
+    {
+        if(root==NULL)
+        {
+            static T temp;
+            return temp;
+        }
+        else if(root->right==NULL)
+            return root->val;
+        else
+            return find_max(root->right);
+    }
+
     T closest_ele(T val)
     {
         flag=false;
-        T ans=closest_ele(head,val,INT_MAX);
+        T maxi=find_max(head);
+        T ans=closest_ele(head,val,maxi);
         //cout<<head->val<<endl;
         return ans;
     }
