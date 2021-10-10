@@ -6,9 +6,9 @@ using namespace std;
 bool flag;
 
 class abc{
-    private:
-    int a;
     public:
+    int a;
+    
     abc()
     {
         a=0;
@@ -18,6 +18,7 @@ class abc{
     {
         a=x;
     }
+
 
     abc operator - (abc x)
     {
@@ -342,19 +343,46 @@ class AVL{
         if(root==NULL)
             return ans;
         flag=true;
-        if(abs(root->val-val)<abs(ans-val))
+        T temp1,temp2;
+        if(root->val>val)
+            temp1=root->val-val;
+        else
+            temp1=val-root->val;
+        if(ans>val)
+            temp2=ans-val;
+        else
+            temp2=val-ans;
+        if(temp1<temp2)
             ans=root->val;
         //cout<<ans<<endl;
         if(val<root->val)
         {
             T temp=closest_ele(root->left,val,ans);
-            if(abs(temp-val)<abs(ans-val))
+            T temp3,temp4;
+            if(temp>val)
+                temp3=temp-val;
+            else
+                temp3=val-temp;
+            if(ans>val)
+                temp4=ans-val;
+            else
+                temp4=val-ans;
+            if(temp3<temp4)
                 ans=temp;
         }
         else if(val>root->val)
         {
             T temp=closest_ele(root->right,val,ans);
-            if(abs(temp-val)<abs(ans-val))
+            T temp3,temp4;
+            if(temp>val)
+                temp3=temp-val;
+            else
+                temp3=val-temp;
+            if(ans>val)
+                temp4=ans-val;
+            else
+                temp4=val-ans;
+            if(temp3<temp4)
                 ans=temp;   
         }
         
@@ -578,8 +606,8 @@ int main()
     //cout<<tree.find(10)<<endl;
     //cout<<tree.find(9)<<endl;
     //cout<<tree.find(1)<<endl; 
-    cout<<tree.k_largest(4);
-    //cout<<tree.closest_ele(1);
+   // cout<<tree.k_largest(4);
+    cout<<tree.closest_ele(d);
     
     //cout<<tree.inrange(13,14);
     //int ans=tree.upper_bound(-1);

@@ -3,7 +3,7 @@
 #include<vector>
 using namespace std;
 
-#define maxi 100005
+#define maxi 94961
 #define mod 10000007
 
 bool flag;
