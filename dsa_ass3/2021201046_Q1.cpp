@@ -148,6 +148,7 @@ class trie
    }
    void auto_complete(string s)
    {
+       list.clear();
        node *temp=root;
        for(int i=0;i<s.length();i++)
        {
@@ -194,3 +195,35 @@ class trie
    }
 
 };
+
+
+int main()
+{
+    trie t;
+    string arr[]={"the", "them", "thems", "they", "thee", "thou", "thesis", "that", "then", "thus", "to", "top", "stop"};
+    for(int i=0;i<13;i++)
+    {
+        t.insert(arr[i]);
+    }
+    /*
+    for(int i=0;i<13;i++)
+    {
+        bool ans=t.spell_checker(arr[i]);
+        if(ans)
+            cout<<"True\n";
+        else
+            cout<<"False\n";
+    }
+    t.auto_complete("to");
+    
+    for(int i=0;i<list.size();i++)
+    {
+        cout<<list[i]<<endl;
+    }*/
+    //cout<<list.size();
+    t.auto_correct("step");
+    for(int i=0;i<ans.size();i++)
+    {
+        cout<<ans[i]<<endl;
+    }
+}
