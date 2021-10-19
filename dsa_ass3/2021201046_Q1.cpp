@@ -1,10 +1,39 @@
 #include<iostream>
 #include<vector>
-
+#include<algorithm>
 using namespace std;
 vector<string> ans;
 vector<string> list;
-int Levenshtein(string s1,string s2);
+int Levenshtein(string s1,string target)
+{
+    s1="?"+s1;
+    target="?"+target;
+    int mat[target.length()][s1.length()];
+    for(int i=0;i<target.length();i++)
+    {
+        mat[i][0]=i;
+    }
+    for(int i=0;i<s1.length();i++)
+    {
+        mat[0][i]=i;
+    }
+
+    for(int i=1;i<target.length();i++)
+    {
+        for(int j=1;j<s1.length();j++)
+        {
+            if(target[i]==s1[j])
+            {
+                mat[i][j]=mat[i-1][j-1];
+                continue;
+            }
+
+            mat[i][j]=min(mat[i-1][j-1],min(mat[i-1][j],mat[i][j-1]));
+            mat[i][j]++;
+        }
+    }
+    return mat[target.length()-1][s1.length()-1];
+}
 class node
 {
     public:
