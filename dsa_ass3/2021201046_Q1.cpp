@@ -2,9 +2,9 @@
 #include<vector>
 
 using namespace std;
-
+vector<string> ans;
 vector<string> list;
-
+int Levenshtein(string s1,string s2);
 class node
 {
     public:
@@ -128,6 +128,40 @@ class trie
             temp=temp->child[index];
        }
        auto_complete(temp,s);
+   }
+
+   void auto_correct(node *r,string s,string target)
+   {
+       if(r==NULL)
+            return;
+        if(r->last_char)
+        {
+            int check=Levenshtein(s,target);
+            if(check<=3)
+            ans.push_back(s);
+        }
+        for(int i=0;i<26;i++)
+        {
+            if(r->child[i]!=NULL)
+            {
+                char c = (char)(i +'a');
+                s=s+c;
+                auto_correct(r->child[i],s,target);
+                s.pop_back();
+            }
+        }
+   }
+
+   void auto_correct(string target)
+   {
+       ans.clear();
+       if(spell_checker(target))
+       {
+           ans.push_back(target);
+           return;
+       }
+       auto_correct(root,"",target);
+
    }
 
 };
