@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<climits>
 using namespace std;
 
 vector<int> heap_pos;
@@ -89,6 +90,23 @@ int main()
     //Heap will have ans in descending order
 }
 
+void initialize(vertex_det heap[],int s, int no_of_nodes)
+{
+    for(int i=0;i<no_of_nodes;i++)
+    {
+        heap[i].v=i;
+        heap_pos[i]=i;
+        heap[i].distance=INT_MAX;
+        heap[i].parent=-1;
+    }
+    heap_pos[s]=0;
+    heap_pos[0]=s;
+    heap[s].distance=0;
+    vertex_det temp=heap[s];
+    heap[s]=heap[0];
+    heap[0]=temp;
+}
+
 void graph_initialize(graph *g[],int no_of_nodes)
 {
     for(int i=0;i<no_of_nodes;i++)
@@ -128,4 +146,33 @@ void heapify(vertex_det heap[],int s, int no_of_nodes)
     if(index==s)
         return ;
     heapify(heap,index,no_of_nodes);    
+}
+
+
+void relax(vertex_det heap[],int child,int parent,int edge_weight)
+{
+    if(heap[heap_pos[child]].distance>(heap[heap_pos[parent]].distance+edge_weight))
+    {
+        heap[heap_pos[child]].parent=parent;
+        heap[heap_pos[child]].distance=(heap[heap_pos[parent]].distance+edge_weight);
+        decrease_key(heap,heap_pos[child]);
+    }
+}
+
+
+void decrease_key(vertex_det heap[],int index)
+{
+    if(index==0)
+        return;
+    int parent=(index-1)/2;
+    if(heap[parent].distance > heap[index].distance || (heap[parent].distance==heap[index].distance && heap[parent].v>heap[index].v))
+    {
+
+        heap_pos[heap[parent].v]=index;
+        heap_pos[heap[index].v]=parent;
+        vertex_det temp=heap[parent];
+        heap[parent]=heap[index];
+        heap[index]=temp;
+        decrease_key(heap,parent);
+    }
 }
