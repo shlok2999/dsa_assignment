@@ -95,7 +95,7 @@ void initialize(vertex_det heap[],int s, int no_of_nodes)
     for(int i=0;i<no_of_nodes;i++)
     {
         heap[i].v=i;
-        heap_pos[i]=i;
+        heap_pos.push_back(i);
         heap[i].distance=INT_MAX;
         heap[i].parent=-1;
     }
