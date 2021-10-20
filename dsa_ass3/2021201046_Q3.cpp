@@ -1,6 +1,60 @@
 #include<iostream>
 using namespace std;
 
+bool dfs(char **mat,int r,int c,int x,int y,string s); 
+bool solve(char **mat,int r,int c,string s);
+void sort(string list[],int i,int j);
+int partition(string list[],int i,int j);
+
+int main()
+{
+    int r,c;
+    cin>>r;
+    cin>>c;
+    char **mat=new char*[r];
+    for(int i=0;i<r;i++)
+    {
+        mat[i]=new char[c];
+    }
+
+    for(int i=0;i<r;i++)
+    {
+        for(int j=0;j<c;j++)
+        {
+            char temp;
+            cin>>temp;
+            mat[i][j]=temp;
+        }
+    }
+
+    //print(mat,r,c);
+    int n;
+    cin>>n;
+    string list[n];
+    for(int i=0;i<n;i++)
+    {
+        string temp;
+        cin>>temp;
+        list[i]=temp;
+        
+    }
+    /*
+    for(int i=0;i<n;i++)
+        cout<<list[i]<<endl;
+    */
+   sort(list,0,n-1);
+   for(int i=0;i<n;i++)
+   {
+       if(solve(mat,r,c,list[i]))
+        cout<<list[i]<<" ";
+   }
+
+    for(int i=0;i<r;i++)
+        delete [] mat[i];
+    delete [] mat;
+}
+
+
 bool dfs(char **mat,int r,int c,int x,int y,string s)
 {
     if(s=="")
@@ -59,43 +113,3 @@ void print(char **mat,int r,int c)
 }
 */
 
-int main()
-{
-    int r,c;
-    cin>>r;
-    cin>>c;
-    char **mat=new char*[r];
-    for(int i=0;i<r;i++)
-    {
-        mat[i]=new char[c];
-    }
-
-    for(int i=0;i<r;i++)
-    {
-        for(int j=0;j<c;j++)
-        {
-            char temp;
-            cin>>temp;
-            mat[i][j]=temp;
-        }
-    }
-
-    //print(mat,r,c);
-    int n;
-    cin>>n;
-    string list[n];
-    for(int i=0;i<n;i++)
-    {
-        string temp;
-        cin>>temp;
-        list[i]=temp;
-        
-    }
-    /*
-    for(int i=0;i<n;i++)
-        cout<<list[i]<<endl;
-    */
-    for(int i=0;i<r;i++)
-        delete [] mat[i];
-    delete [] mat;
-}
