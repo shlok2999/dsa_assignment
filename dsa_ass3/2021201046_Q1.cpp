@@ -164,6 +164,8 @@ class trie
    {
        if(r==NULL)
             return;
+        if(s.length()>target.length()+3)
+            return;
         if(r->last_char)
         {
             int check=Levenshtein(s,target);
@@ -221,7 +223,7 @@ int main()
         cout<<list[i]<<endl;
     }*/
     //cout<<list.size();
-    t.auto_correct("step");
+    t.auto_correct("p");
     for(int i=0;i<ans.size();i++)
     {
         cout<<ans[i]<<endl;
