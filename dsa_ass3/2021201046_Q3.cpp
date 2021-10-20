@@ -113,3 +113,33 @@ void print(char **mat,int r,int c)
 }
 */
 
+void sort(string list[],int i,int j)
+{
+    if(i>=j)
+        return;
+    int pivot=partition(list,i,j);
+    sort(list,i,pivot-1);
+    sort(list,pivot+1,j);
+}
+
+
+int partition(string list[],int start,int end)
+{
+    int p=start;
+    string pivot=list[start];
+    for(int i=start+1;i<=end;i++)
+    {
+        if(list[i]<=pivot)
+        {
+            p++;
+            string temp=list[i];
+            list[i]=list[p];
+            list[p]=temp;
+        }
+    }
+
+    string temp=list[start];
+    list[start]=list[p];
+    list[p]=temp;
+    return p;
+}
