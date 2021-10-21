@@ -56,42 +56,56 @@ int main()
         cin>>destination;
         cout<<"Enter the time taken:";
         cin>>weight;
-        graph *temp=new graph;
-        temp->v=destination;
-        temp->w=weight;
-        temp->next=g[source];
-        g[source]=temp; 
+        graph *temp1=new graph;
+        temp1->v=destination;
+        temp1->w=weight;
+        temp1->next=g[source];
+        g[source]=temp1;
+        graph *temp2=new graph;
+        temp2->v=source;
+        temp2->w=weight;
+        temp2->next=g[destination];
+        g[destination]=temp2; 
     }
-    int source;
+    int s;
     cout<<"Enter the city:";
-    cin>>source;
+    cin>>s;
     vertex_det heap[vertex];
-    initialize(heap,source,vertex);
+    initialize(heap,s,vertex);
     int size=vertex-1;
     while(size>0)
     {
         vertex_det mini=heap[0];
         heap[0]=heap[size];
         heap[size]=mini;
+        heap_pos[mini.v]=size;
+        heap_pos[heap[0].v]=0;
         heapify(heap,0,size-1);
         int index=mini.v;
+        //cout<<index;
         graph *temp=g[index];
         while(temp!=NULL)
         {
             if(heap_pos[temp->v]<size)
             {
+
                 relax(heap,temp->v,index,temp->w);
             }
+
+            temp=temp->next;
         }
 
         size--;
     }
     //dijktras algo finished 
     //Heap will have ans in descending order
+    for(int i=0;i<vertex;i++)
+        cout<<heap[i].distance<<" "<<heap[i].v<<endl;
 }
 
 void initialize(vertex_det heap[],int s, int no_of_nodes)
 {
+    //cout<<"hello";
     for(int i=0;i<no_of_nodes;i++)
     {
         heap[i].v=i;
@@ -105,6 +119,7 @@ void initialize(vertex_det heap[],int s, int no_of_nodes)
     vertex_det temp=heap[s];
     heap[s]=heap[0];
     heap[0]=temp;
+    //cout<<"bye";
 }
 
 void graph_initialize(graph *g[],int no_of_nodes)
