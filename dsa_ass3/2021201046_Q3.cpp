@@ -7,13 +7,19 @@ using namespace std;
 class node
 {
     public:
-    class node *child[26];
+    node *child[26];
+    string word;
     bool last_char;
     node()
     {
         for(int i=0;i<26;i++)
             child[i]=NULL;
         last_char=false;
+    }
+    ~node()
+    {
+        for(int i=0;i<26;i++)
+            delete child[i];
     }
 };
 
@@ -36,8 +42,12 @@ class trie
             temp=temp->child[index];
         }
         temp->last_char=true;
+        temp->word=s;
     }
-    
+    ~trie()
+    {
+        delete root;
+    }
 };
 
 trie t;
@@ -45,7 +55,7 @@ string *list;
 int count;
 
 void dfs(char **mat,int r,int c,int x,int y,node* head,string s); 
-bool solve(char **mat,int r,int c,string s);
+void solve(char **mat,int r,int c);
 void sort(string list[],int i,int j);
 int partition(string list[],int i,int j);
 
@@ -83,10 +93,18 @@ int main()
         cin>>temp;
         t.insert(temp);
     }
+    //cout<<"Enter";
     count=-1;
     list=new string[n];
-    sort(list,0,n-1);
-   
+    solve(mat, r, c);
+    
+    //cout<<count;
+    
+    sort(list,0,count);
+   for(int i=0;i<=count;i++)
+    cout<<list[i]<<" ";
+
+    delete [] list;
 
     for(int i=0;i<r;i++)
         delete [] mat[i];
@@ -97,18 +115,24 @@ void solve(char **mat,int r,int c)
 {
 
     node *head=t.root;
-    
+    //cout<<r<<c;
+
     for(int i=0;i<r;i++)
     {
         for(int j=0;j<c;j++)
         {
+            
             char ch=mat[i][j];
+            //cout<<ch;
             int index=(int)(ch-'a');
             if(head->child[index]!=NULL)
             {
+                //cout<<ch;
                 mat[i][j]='@';
                 node *temp=head->child[index];
-                string temp2=to_string(ch);
+                string temp2(1,ch);
+                //cout<<ch;
+                //cout<<temp2;
                 dfs(mat,r,c,i+1,j,temp,temp2);
                 dfs(mat,r,c,i-1,j,temp,temp2); 
                 dfs(mat,r,c,i,j-1,temp,temp2); 
@@ -122,13 +146,17 @@ void solve(char **mat,int r,int c)
 
 void dfs(char **mat,int r,int c,int x,int y,node* head,string s)
 {
-    if(x<0 || x>=r || y<0 || y>=c)
-        return;
+    
     if(head->last_char)
     {
-        count ++;
+        count++;
         list[count]=s;
+        head->last_char=false;
+        //cout<<s;
     }
+    if(x<0 || x>=r || y<0 || y>=c)
+        return;
+    
     char ch=mat[x][y];
     if(ch=='@')
         return;
