@@ -4,6 +4,10 @@
 using namespace std;
 vector<string> ans;
 vector<string> list;
+vector< vector<int>> mat;
+int col;
+int index;
+/*
 int Levenshtein(string s1,string target)
 {
     s1="?"+s1;
@@ -34,6 +38,7 @@ int Levenshtein(string s1,string target)
     }
     return mat[target.length()-1][s1.length()-1];
 }
+*/
 class node
 {
     public:
@@ -71,7 +76,7 @@ class trie
     bool spell_checker(string s)
     {
 
-          node *temp=root;
+        node *temp=root;
         for(int i=0;i<s.length();i++)
         {
             int index=(int)(s[i]-'a');
@@ -124,7 +129,8 @@ class trie
             return;
         if(r->last_char)
         {
-            int check=Levenshtein(s,target);
+            
+            int check=mat[index-1][col-1];
             if(check<=3)
             ans.push_back(s);
         }
@@ -134,8 +140,24 @@ class trie
             {
                 char c = (char)(i +'a');
                 s=s+c;
+                vector<int> temp(col,0);
+                temp[0]=index;
+                for(int j=1;j<col;j++)
+                {
+                    if(c==target[j-1])
+                    {
+                        temp[j]=mat[index-1][j-1];
+                        continue;
+                    }
+                    temp[j]=min(mat[index-1][j],min(temp[j-1],mat[index-1][j-1]));
+                    temp[j]++;
+                }
+                mat.push_back(temp);
+                index++;
                 auto_correct(r->child[i],s,target);
                 s.pop_back();
+                index--;
+                mat.pop_back();
             }
         }
    }
@@ -148,6 +170,12 @@ class trie
            ans.push_back(target);
            return;
        }
+       vector<int> temp;
+       for(int i=0;i<=target.length();i++)
+        temp.push_back(i);
+        mat.push_back(temp);
+        index=1;
+        col=target.length()+1;
        auto_correct(root,"",target);
 
    }
