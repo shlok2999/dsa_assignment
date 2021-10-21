@@ -37,7 +37,7 @@ int Levenshtein(string s1,string target)
 class node
 {
     public:
-    struct node *child[26];
+    node *child[26];
     bool last_char;
     node()
     {
