@@ -8,7 +8,6 @@ class node
 {
     public:
     node *child[26];
-    string word;
     bool last_char;
     node()
     {
@@ -42,7 +41,6 @@ class trie
             temp=temp->child[index];
         }
         temp->last_char=true;
-        temp->word=s;
     }
     ~trie()
     {
