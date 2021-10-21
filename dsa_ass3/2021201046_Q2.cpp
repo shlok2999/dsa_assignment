@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<climits>
+#include<algorithm>
 using namespace std;
 
 vector<int> heap_pos;
@@ -36,6 +37,7 @@ void heapify(vertex_det heap[],int s, int no_of_nodes);
 void decrease_key(vertex_det heap[],int index);
 void relax(vertex_det heap[],int child,int parent,int edge_weight);
 void graph_initialize(graph *g[],int no_of_nodes);
+void print(vertex_det heap[],int key,int source);
 
 int main()
 {
@@ -99,8 +101,13 @@ int main()
     }
     //dijktras algo finished 
     //Heap will have ans in descending order
-    for(int i=0;i<vertex;i++)
-        cout<<heap[i].distance<<" "<<heap[i].v<<endl;
+    //reverse(heap,heap+vertex);
+    for(int i=0;i<vertex-1;i++)
+    {
+        // cout<<heap[i].distance<<" "<<heap[i].v<<endl;
+        print(heap,i,s);
+        cout<<"\n";
+    }
 }
 
 void initialize(vertex_det heap[],int s, int no_of_nodes)
@@ -166,7 +173,7 @@ void heapify(vertex_det heap[],int s, int no_of_nodes)
 
 void relax(vertex_det heap[],int child,int parent,int edge_weight)
 {
-    if(heap[heap_pos[child]].distance>(heap[heap_pos[parent]].distance+edge_weight))
+    if(heap[heap_pos[child]].distance>(heap[heap_pos[parent]].distance+edge_weight) || ((heap[heap_pos[child]].distance==(heap[heap_pos[parent]].distance+edge_weight)) && parent<heap[heap_pos[child]].parent))
     {
         heap[heap_pos[child]].parent=parent;
         heap[heap_pos[child]].distance=(heap[heap_pos[parent]].distance+edge_weight);
@@ -189,5 +196,17 @@ void decrease_key(vertex_det heap[],int index)
         heap[parent]=heap[index];
         heap[index]=temp;
         decrease_key(heap,parent);
+    }
+}
+
+void print(vertex_det heap[],int key,int source)
+{
+    cout<<heap[key].v<<" ";
+    if(heap[key].parent==source)
+        cout<<source;
+    else
+    {
+        int index=heap_pos[heap[key].parent];
+        print(heap,index,source);
     }
 }
