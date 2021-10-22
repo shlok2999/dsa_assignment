@@ -105,7 +105,10 @@ int main()
     for(int i=0;i<vertex-1;i++)
     {
         // cout<<heap[i].distance<<" "<<heap[i].v<<endl;
-        print(heap,i,s);
+        if(i==s)
+            continue;
+        int index=heap_pos[i];
+        print(heap,index,s);
         cout<<"\n";
     }
 }
