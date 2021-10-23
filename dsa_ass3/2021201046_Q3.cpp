@@ -9,11 +9,13 @@ class node
     public:
     node *child[26];
     bool last_char;
+    string word;
     node()
     {
         for(int i=0;i<26;i++)
             child[i]=NULL;
         last_char=false;
+        word="";
     }
     ~node()
     {
@@ -41,6 +43,7 @@ class trie
             temp=temp->child[index];
         }
         temp->last_char=true;
+        temp->word=s;
     }
     ~trie()
     {
@@ -52,7 +55,7 @@ trie t;
 string *list;
 int count;
 
-void dfs(char **mat,int r,int c,int x,int y,node* head,string s); 
+void dfs(char **mat,int r,int c,int x,int y,node* head); 
 void solve(char **mat,int r,int c);
 void sort(string list[],int i,int j);
 int partition(string list[],int i,int j);
@@ -128,13 +131,13 @@ void solve(char **mat,int r,int c)
                 //cout<<ch;
                 mat[i][j]='@';
                 node *temp=head->child[index];
-                string temp2(1,ch);
+                
                 //cout<<ch;
                 //cout<<temp2;
-                dfs(mat,r,c,i+1,j,temp,temp2);
-                dfs(mat,r,c,i-1,j,temp,temp2); 
-                dfs(mat,r,c,i,j-1,temp,temp2); 
-                dfs(mat,r,c,i,j+1,temp,temp2);
+                dfs(mat,r,c,i+1,j,temp);
+                dfs(mat,r,c,i-1,j,temp); 
+                dfs(mat,r,c,i,j-1,temp); 
+                dfs(mat,r,c,i,j+1,temp);
                 mat[i][j]=ch;
             }
         }
@@ -142,13 +145,13 @@ void solve(char **mat,int r,int c)
 }
 
 
-void dfs(char **mat,int r,int c,int x,int y,node* head,string s)
+void dfs(char **mat,int r,int c,int x,int y,node* head)
 {
     
     if(head->last_char)
     {
         count++;
-        list[count]=s;
+        list[count]=head->word;
         head->last_char=false;
         //cout<<s;
     }
@@ -163,11 +166,11 @@ void dfs(char **mat,int r,int c,int x,int y,node* head,string s)
     {
         mat[x][y]='@';
         node *temp=head->child[index];
-        string temp2=s+ch;
-        dfs(mat,r,c,x+1,y,temp,temp2);
-        dfs(mat,r,c,x-1,y,temp,temp2); 
-        dfs(mat,r,c,x,y-1,temp,temp2); 
-        dfs(mat,r,c,x,y+1,temp,temp2);
+        //string temp2=s+ch;
+        dfs(mat,r,c,x+1,y,temp);
+        dfs(mat,r,c,x-1,y,temp); 
+        dfs(mat,r,c,x,y-1,temp); 
+        dfs(mat,r,c,x,y+1,temp);
         mat[x][y]=ch;
     }
     else
