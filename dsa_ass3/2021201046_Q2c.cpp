@@ -75,13 +75,13 @@ int main()
     {
         int x=rider[i].first;
         int y=rider[i].second;
-        if(mat[x][y]<ans)
+        if(mat[x][y]<ans  &&  mat[x][y]>=0)
         {
             check=false;
             break;
         }
     }
-    if(check)
+    if(check && ans!=-1)
     {
         cout<<"YES\n";
         cout<<ans<<endl;
