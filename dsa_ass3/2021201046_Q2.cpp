@@ -2,6 +2,7 @@
 #include<vector>
 #include<climits>
 #include<algorithm>
+#include<string>
 using namespace std;
 
 vector<int> heap_pos;
@@ -42,9 +43,9 @@ void print(vertex_det heap[],int key,int source);
 int main()
 {
     int vertex,edge;
-    cout<<"Enter no of cities:";
+    //cout<<"Enter no of cities:";
     cin>>vertex;
-    cout<<"Enter Number of roads:";
+    //cout<<"Enter Number of roads:";
     cin>>edge;
     graph *g[vertex];
     graph_initialize(g,vertex);
@@ -52,11 +53,11 @@ int main()
     for(int i=0;i<edge;i++)
     {
         int source,destination,weight;
-        cout<<"Enter the source:";
+        //cout<<"Enter the source:";
         cin>>source;
-        cout<<"Enter the destination:";
+        //cout<<"Enter the destination:";
         cin>>destination;
-        cout<<"Enter the time taken:";
+        //cout<<"Enter the time taken:";
         cin>>weight;
         graph *temp1=new graph;
         temp1->v=destination;
@@ -70,7 +71,7 @@ int main()
         g[destination]=temp2; 
     }
     int s;
-    cout<<"Enter the city:";
+    //cout<<"Enter the city:";
     cin>>s;
     vertex_det heap[vertex];
     initialize(heap,s,vertex);
@@ -99,10 +100,20 @@ int main()
 
         size--;
     }
+    // for(int i=0;i<vertex;i++)
+    // {
+    //     graph *temp=g[i];
+    //     while(temp!=NULL)
+    //     {
+    //         cout<<i<<" "<<temp->v<<" "<<temp->w<<endl;
+    //         temp=temp->next;
+    //     }
+    // }
     //dijktras algo finished 
     //Heap will have ans in descending order
     //reverse(heap,heap+vertex);
-    for(int i=0;i<vertex-1;i++)
+    
+    for(int i=0;i<vertex;i++)
     {
         // cout<<heap[i].distance<<" "<<heap[i].v<<endl;
         if(i==s)
@@ -111,6 +122,8 @@ int main()
         print(heap,index,s);
         cout<<"\n";
     }
+    
+    
 }
 
 void initialize(vertex_det heap[],int s, int no_of_nodes)
@@ -146,7 +159,7 @@ void heapify(vertex_det heap[],int s, int no_of_nodes)
     int right=2*s+2;
     if(left<=no_of_nodes)
     {
-        if((heap[left].distance<heap[s].distance) || (heap[left].distance==heap[s].distance && heap[left].v <heap[s].v))
+        if((heap[left].distance<heap[s].distance))
         {
             heap_pos[heap[s].v]=left;
             heap_pos[heap[left].v]=s;
@@ -158,7 +171,7 @@ void heapify(vertex_det heap[],int s, int no_of_nodes)
     }
     if(right<=no_of_nodes)
     {
-        if((heap[right].distance<heap[s].distance) || (heap[right].distance==heap[s].distance && heap[right].v <heap[s].v))
+        if((heap[right].distance<heap[s].distance))
         {
             heap_pos[heap[s].v]=right;
             heap_pos[heap[right].v]=s;
@@ -176,7 +189,7 @@ void heapify(vertex_det heap[],int s, int no_of_nodes)
 
 void relax(vertex_det heap[],int child,int parent,int edge_weight)
 {
-    if(heap[heap_pos[child]].distance>(heap[heap_pos[parent]].distance+edge_weight) || ((heap[heap_pos[child]].distance==(heap[heap_pos[parent]].distance+edge_weight)) && parent<heap[heap_pos[child]].parent))
+    if(heap[heap_pos[child]].distance>(heap[heap_pos[parent]].distance+edge_weight) || ((heap[heap_pos[child]].distance==(heap[heap_pos[parent]].distance+edge_weight)) && to_string(parent)<to_string(heap[heap_pos[child]].parent)))
     {
         heap[heap_pos[child]].parent=parent;
         heap[heap_pos[child]].distance=(heap[heap_pos[parent]].distance+edge_weight);
@@ -190,7 +203,7 @@ void decrease_key(vertex_det heap[],int index)
     if(index==0)
         return;
     int parent=(index-1)/2;
-    if(heap[parent].distance > heap[index].distance || (heap[parent].distance==heap[index].distance && heap[parent].v>heap[index].v))
+    if(heap[parent].distance > heap[index].distance )
     {
 
         heap_pos[heap[parent].v]=index;
