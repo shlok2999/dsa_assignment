@@ -1,8 +1,59 @@
 #include<iostream>
 using namespace std;
 
-bool dfs(char **mat,int r,int c,int x,int y,string s); 
-bool solve(char **mat,int r,int c,string s);
+
+
+
+class node
+{
+    public:
+    node *child[26];
+    bool last_char;
+    node()
+    {
+        for(int i=0;i<26;i++)
+            child[i]=NULL;
+        last_char=false;
+    }
+    ~node()
+    {
+        for(int i=0;i<26;i++)
+            delete child[i];
+    }
+};
+
+class trie
+{
+    public:
+    node *root;
+    trie()
+    {
+        root=new node;
+    }
+    void insert(string s)
+    {
+        node *temp=root;
+        for(int i=0;i<s.length();i++)
+        {
+            int index=(int)(s[i]-'a');
+            if(temp->child[index]==NULL)
+                temp->child[index]=new node;
+            temp=temp->child[index];
+        }
+        temp->last_char=true;
+    }
+    ~trie()
+    {
+        delete root;
+    }
+};
+
+trie t;
+string *list;
+int count;
+
+void dfs(char **mat,int r,int c,int x,int y,node* head,string s); 
+void solve(char **mat,int r,int c);
 void sort(string list[],int i,int j);
 int partition(string list[],int i,int j);
 
@@ -12,6 +63,7 @@ int main()
     cin>>r;
     cin>>c;
     char **mat=new char*[r];
+    //Accepting the 2-d matrix of alphabets and creating matrix
     for(int i=0;i<r;i++)
     {
         mat[i]=new char[c];
@@ -28,90 +80,100 @@ int main()
     }
 
     //print(mat,r,c);
+    //Taking string input 
     int n;
     cin>>n;
-    string list[n];
+    //string list[n];
+    
     for(int i=0;i<n;i++)
     {
         string temp;
         cin>>temp;
-        list[i]=temp;
-        
+        t.insert(temp);
     }
-    /*
-    for(int i=0;i<n;i++)
-        cout<<list[i]<<endl;
-    */
-   sort(list,0,n-1);
-   for(int i=0;i<n;i++)
-   {
-       if(solve(mat,r,c,list[i]))
-        cout<<list[i]<<" ";
-   }
+    //cout<<"Enter";
+    count=-1;
+    list=new string[n];
+    solve(mat, r, c);
+    
+    //cout<<count;
+    
+    sort(list,0,count);
+   for(int i=0;i<=count;i++)
+    cout<<list[i]<<" ";
+
+    delete [] list;
 
     for(int i=0;i<r;i++)
         delete [] mat[i];
     delete [] mat;
 }
 
-
-bool dfs(char **mat,int r,int c,int x,int y,string s)
+void solve(char **mat,int r,int c)
 {
-    if(s=="")
-        return true;
-    if(x<0 || x>=r || y<0 || y>=c)
-        return false;
-    if(mat[x][y]==s[0])
-    {
-        mat[x][y]='@';
-        char ch=s[0];
-        s.erase(s.begin());
-        bool ans= dfs(mat,r,c,x+1,y,s) || dfs(mat,r,c,x-1,y,s) || dfs(mat,r,c,x,y-1,s) || dfs(mat,r,c,x,y+1,s);
-        mat[x][y]=ch;
-        return ans;  
-    }
-    else
-        return false;
-}
 
-bool solve(char **mat,int r,int c,string s)
-{
-    if(s=="")
-        return true;
-    
+    node *head=t.root;
+    //cout<<r<<c;
+
     for(int i=0;i<r;i++)
     {
         for(int j=0;j<c;j++)
         {
-            if(mat[i][j]==s[0])
+            
+            char ch=mat[i][j];
+            //cout<<ch;
+            int index=(int)(ch-'a');
+            if(head->child[index]!=NULL)
             {
+                //cout<<ch;
                 mat[i][j]='@';
-                char ch=s[0];
-                s.erase(s.begin());
-                bool ans= dfs(mat,r,c,i+1,j,s) || dfs(mat,r,c,i-1,j,s) || dfs(mat,r,c,i,j-1,s) || dfs(mat,r,c,i,j+1,s);
-                mat[i][j]=ch;   
-                s=ch+s;
-                if(ans)
-                    return ans;
+                node *temp=head->child[index];
+                string temp2(1,ch);
+                //cout<<ch;
+                //cout<<temp2;
+                dfs(mat,r,c,i+1,j,temp,temp2);
+                dfs(mat,r,c,i-1,j,temp,temp2); 
+                dfs(mat,r,c,i,j-1,temp,temp2); 
+                dfs(mat,r,c,i,j+1,temp,temp2);
+                mat[i][j]=ch;
             }
         }
     }
-
-    return false;
 }
 
-/*
 
-void print(char **mat,int r,int c)
+void dfs(char **mat,int r,int c,int x,int y,node* head,string s)
 {
-    for(int i=0;i<r;i++)
+    
+    if(head->last_char)
     {
-        for(int j=0;j<c;j++)
-            cout<<mat[i][j]<<" ";
-        cout<<endl;
+        count++;
+        list[count]=s;
+        head->last_char=false;
+        //cout<<s;
     }
+    if(x<0 || x>=r || y<0 || y>=c)
+        return;
+    
+    char ch=mat[x][y];
+    if(ch=='@')
+        return;
+    int index=(int)(ch-'a');
+    if(head->child[index]!=NULL)
+    {
+        mat[x][y]='@';
+        node *temp=head->child[index];
+        string temp2=s+ch;
+        dfs(mat,r,c,x+1,y,temp,temp2);
+        dfs(mat,r,c,x-1,y,temp,temp2); 
+        dfs(mat,r,c,x,y-1,temp,temp2); 
+        dfs(mat,r,c,x,y+1,temp,temp2);
+        mat[x][y]=ch;
+    }
+    else
+        return;
 }
-*/
+
 
 void sort(string list[],int i,int j)
 {
