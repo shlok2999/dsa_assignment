@@ -186,30 +186,40 @@ class trie
 int main()
 {
     trie t;
-    string arr[]={"the", "them", "thems", "they", "thee", "thou", "thesis", "that", "then", "thus", "to", "top", "stop"};
-    for(int i=0;i<13;i++)
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++)
     {
-        t.insert(arr[i]);
+        string s;
+        cin>>s;
+        t.insert(s);
     }
-    /*
-    for(int i=0;i<13;i++)
+    int choice;
+    cin>>choice;
+    string word;
+    cin>>word;
+    if(choice==1)
     {
-        bool ans=t.spell_checker(arr[i]);
-        if(ans)
-            cout<<"True\n";
-        else
-            cout<<"False\n";
+        
+        bool ans=t.spell_checker(word);
+        cout<<ans;
     }
-    t.auto_complete("to");
-    
-    for(int i=0;i<list.size();i++)
+    else if(choice==2)
     {
-        cout<<list[i]<<endl;
-    }*/
-    //cout<<list.size();
-    t.auto_correct("p");
-    for(int i=0;i<ans.size();i++)
+        t.auto_complete(word);
+        cout<<list.size()<<endl;
+        for(int i=0;i<list.size();i++)
+        {
+            cout<<list[i]<<endl;
+        }
+    }
+    else if(choice==3)
     {
-        cout<<ans[i]<<endl;
+        t.auto_correct(word);
+        cout<<ans.size()<<endl;
+        for(int i=0;i<ans.size();i++)
+        {
+            cout<<ans[i]<<endl;
+        }
     }
 }
