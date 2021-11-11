@@ -165,11 +165,6 @@ class trie
    void auto_correct(string target)
    {
        ans.clear();
-       if(spell_checker(target))
-       {
-           ans.push_back(target);
-           return;
-       }
        vector<int> temp;
        for(int i=0;i<=target.length();i++)
         temp.push_back(i);
