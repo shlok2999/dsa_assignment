@@ -92,7 +92,7 @@ int main()
     int n,q;
     //cout<<"enter the number:";
     cin>>n;
-    cout<<"Enter no of queries:";
+    //cout<<"Enter no of queries:";
     cin>>q;
     //int *arr=new int[n];
     //cout<<"Enter arrays:";
@@ -103,7 +103,7 @@ int main()
         //arr[i]=temp;
         t.insert(temp);
     }
-    cout<<"Enter queries:";
+    //cout<<"Enter queries:";
     for(int i=0;i<q;i++)
     {
         int query;
