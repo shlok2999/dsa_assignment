@@ -3,31 +3,33 @@
 #include<climits>
 #include<vector>
 #include <unistd.h>
-
+#include<algorithm>
+#include<string.h>
 using namespace std;
 
 /////////////////////////////////////////// Classes and global variables //////////////////////////////////////////////////
 vector<string> lof;
 
-class heap
+class node
 {
     public:
-    class node
+    long long int file_num;
+    long long int num;
+    node()
     {
-        public:
-        long long int file_num;
-        int num;
-        node()
-        {
-            file_num=-1;
-            num=INT_MAX;
-        }
-        node(long long int val, long long int file_no)
-        {
-            num=val;
-            file_num=file_no;
-        }
-    };    
+        file_num=-1;
+        num=INT_MAX;
+    }
+    node(long long int val, long long int file_no)
+    {
+        num=val;
+        file_num=file_no;
+    }
+};
+
+class heap
+{
+    public:    
     int size;
     node *heap_arr;
     heap(int n)
@@ -82,19 +84,19 @@ class heap
 };
 /////////////////////////////////////////////////////// Function Defination ///////////////////////////////////////////////////////
 
-void sort(char* input,char *out,int file_size);
-void merge_sort_file(char* input,int file_size);
-void merge_sort(int *arr,int start, int end);
+void solve(char* input,char *out,long long int file_size);
+void merge_sort_file(char* input,long long int file_size);
+void merge_sort(int *arr,long long int start,long long int end);
 void merge(int *arr,int start, long long int mid,long long int end);
-void merge_file(char *output,int file_size);
+void merge_file(char *output,long long int file_size);
 void delete_file();
 
 //////////////////////////////////////////////////// Main Funation //////////////////////////////////////////////////////////////
 
-int main()
+int main(int argc, char *argv[])
 {
-    int file_size=1000;
-    int num_of_chunks;
+    int file_size=50000;
+    solve(argv[1],argv[2],file_size);
 
 }
 
@@ -159,10 +161,10 @@ void merge_sort(int *arr,long long int start,long long int end)
 
 //////////////////////////////////////////// Function to perform External sort /////////////////////////////////////////////////
 
-void sort(char* input,char *output,int file_size,int n)
+void solve(char* input,char *output,long long int file_size)
 {
-    void merge_sort_file(char *input,int file_size,int n);
-    void merge_file(char *output,int file_size);
+    merge_sort_file(input,file_size);
+    merge_file(output,file_size);
     delete_file();
 }
 
@@ -183,14 +185,15 @@ void merge_sort_file(char * input,long long int file_size)
     while(1)
     {
         //Initializing arr 
-        int *arr=new int[file_size];
-        int actual_size=0;       
+        long long int *arr=new long long int[file_size];
+        long long int actual_size=0;       
         for(long long int i=0;i<file_size;i++)
         {
-            if (fscanf(in, "%d,", &arr[i]) != 1) {
+            if (fscanf(in, "%lld,", &arr[i]) != 1) {
                 more_file = false;
                 break;
             }
+            cout<<arr[i]<<endl;
             actual_size++;
         }
         if(actual_size==0) // Checking if the file is empty
@@ -205,7 +208,7 @@ void merge_sort_file(char * input,long long int file_size)
         lof.push_back(file_name);
 
         // Sorting the array
-        merge_sort(arr,0,actual_size-1);
+        sort(arr,arr+actual_size);
         
         //Witing data in temp file        
         FILE *out=fopen(file_name.c_str(),"w");
@@ -218,9 +221,10 @@ void merge_sort_file(char * input,long long int file_size)
 
         for(int i=0;i<actual_size;i++)
         {
-            fprintf(out,"%d,", arr[i]);
+            fprintf(out,"%lld,", arr[i]);
         }
         fclose(out);
+        memset(arr,0,sizeof(arr));
         delete [] arr;
         if(more_file==false)
             break;
@@ -240,7 +244,7 @@ void delete_file()
 
 ///////////////////////////// K-way Merge Sort /////////////////////////////////////////////////
 
-void merge_file(char *output,int file_size)
+void merge_file(char *output,long long int file_size)
 {
     int num_of_file=lof.size();
     FILE *out =fopen(output,"w");
@@ -268,15 +272,39 @@ void merge_file(char *output,int file_size)
     heap h(num_of_file);
     for(int i=0;i<num_of_file;i++)
     {
-        int num;
-        if (fscanf(in[i], "%d,", &num) != 1)
+        long long int num;
+        if (fscanf(in[i], "%lld,", &num) != 1)
         {
             break;
         }
-
+        cout<<num<<endl;
         h.insert(i,num,i);
     }
 
     h.build_heap();
-    
+
+    while(nofc!=num_of_file)
+    {
+        node min=h.heap_arr[0];
+        fprintf(out,"%lld,", min.num);
+        
+        int file_num=min.file_num;
+
+        long long int num;
+        node new_val;
+        if(fscanf(in[file_num],"%lld,",&num)!=1)
+            nofc++;
+        else
+        {
+            new_val.num=num;
+            new_val.file_num=file_num;
+        }
+        
+        h.rebuild_heap(new_val);
+    }
+    // close input and output files
+    for (int i = 0; i < num_of_file; i++)
+        fclose(in[i]);
+ 
+    fclose(out);
 }
