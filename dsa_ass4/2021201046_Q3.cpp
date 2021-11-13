@@ -90,12 +90,12 @@ int main()
 {
     trie t;
     int n,q;
-    cout<<"enter the number:";
+    //cout<<"enter the number:";
     cin>>n;
     cout<<"Enter no of queries:";
     cin>>q;
     //int *arr=new int[n];
-    cout<<"Enter arrays:";
+    //cout<<"Enter arrays:";
     for(int i=0;i<n;i++)
     {
         int temp;

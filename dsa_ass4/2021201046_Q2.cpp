@@ -163,6 +163,7 @@ void sort(char* input,char *output,int file_size,int n)
 {
     void merge_sort_file(char *input,int file_size,int n);
     void merge_file(char *output,int file_size);
+    delete_file();
 }
 
 ////////////////////////////// Creating Small Temporary file and  each file has sorted data ///////////////////////
@@ -227,7 +228,7 @@ void merge_sort_file(char * input,long long int file_size)
 
     fclose(in);
 }
-
+//////////////////////////////// Function to dlete temporaryy file ////////////////////////////
 void delete_file()
 {
     for(string s:lof)
@@ -256,8 +257,26 @@ void merge_file(char *output,int file_size)
         {
             for(int j=0;j<i;j++)
                 fclose(in[j]);
+            fclose(out);
             cout<<"Unable to open temporary File"<<i;
             exit(0);
         }
     }
+
+
+    int nofc=0; //No of file coppied till now
+    heap h(num_of_file);
+    for(int i=0;i<num_of_file;i++)
+    {
+        int num;
+        if (fscanf(in[i], "%d,", &num) != 1)
+        {
+            break;
+        }
+
+        h.insert(i,num,i);
+    }
+
+    h.build_heap();
+    
 }
