@@ -95,7 +95,7 @@ void delete_file();
 
 int main(int argc, char *argv[])
 {
-    int file_size=50000;
+    int file_size=500000;
     solve(argv[1],argv[2],file_size);
 
 }
