@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include<climits>
 using namespace std;
 
 class suffix
@@ -13,13 +14,26 @@ class suffix
         return this->rank<a.rank;
     }
 };
+vector<int> sa;
+vector<int> lp;
 
+vector<int> suffix_array(string s);
+vector<int> kasai(vector<int> &sa,string s);
+int lcp(int i,int j);
 
+int main()
+{
+    string s;
+    cin>>s;
+    sa=suffix_array(s);
+    lp=kasai(sa,s);
+    // for(int i=0;i<sa.size();i++)
+    // {
+    //     cout<<s.substr(sa[i])<<endl;
+    // }
+}
 
-vector<suffix> suffix_array(string s);
-
-
-vector<suffix> suffix_array(string s)
+vector<int> suffix_array(string s)
 {
     int size=s.length();
     vector<suffix> ans(size);
@@ -62,18 +76,45 @@ vector<suffix> suffix_array(string s)
         sort(ans.begin(),ans.end());
     }
 
-
-    return ans;
+    vector<int> sa;
+    for(suffix ss:ans)
+        sa.push_back(ss.index);
+    return sa;
 }
 
-int main()
-{
-    string s;
-    cin>>s;
-    vector<suffix> ans=suffix_array(s);
 
-    for(int i=0;i<ans.size();i++)
+vector<int> kasai(vector<int> &sa,string s)
+{
+    int n=sa.size();
+    vector<int> rank(n,0);
+    vector<int> lp(n,0);
+    for(int i=0;i<n;i++)
+        rank[sa[i]]=i;
+    int k=0;
+    for(int i=0;i<n;i++)
     {
-        cout<<s.substr(ans[i].index)<<endl;
+        if(rank[i]!=0)
+        {
+            int j=sa[rank[i]-1];
+
+            while(j=k<n && i+k<n && s[i+k]==s[j+k])
+                k++;
+            lp[rank[i]]=k;
+            if(k)
+                k--;
+        }
+        else
+            k=0;
     }
+    return lp;
+}
+
+int lcp(int i, int j)
+{
+    int mini=INT_MAX;
+    for(int k=i+1;k<=j;k++)
+    {
+        mini=min(mini,lp[k]);
+    }
+    return mini;
 }
