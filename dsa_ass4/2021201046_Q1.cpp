@@ -19,6 +19,8 @@ vector<int> lp;
 
 vector<int> suffix_array(string s);
 vector<int> kasai(vector<int> &sa,string s);
+string longest_pall(string s);
+
 int lcp(int i,int j);
 
 int main()
@@ -27,6 +29,9 @@ int main()
     cin>>s;
     sa=suffix_array(s);
     lp=kasai(sa,s);
+
+    string c=longest_pall(s);
+    cout<<c;
     // for(int i=0;i<sa.size();i++)
     // {
     //     cout<<s.substr(sa[i])<<endl;
@@ -97,11 +102,17 @@ vector<int> kasai(vector<int> &sa,string s)
         {
             int j=sa[rank[i]-1];
 
-            while(j=k<n && i+k<n && s[i+k]==s[j+k])
-                k++;
+            while(j+k<n && i+k<n)
+            {
+                if(s[j+k]==s[i+k])
+                    k++;
+                else
+                    break;
+            }    
             lp[rank[i]]=k;
-            if(k)
-                k--;
+            if(k==0)
+                continue;
+            k=k-1;
         }
         else
             k=0;
@@ -117,4 +128,29 @@ int lcp(int i, int j)
         mini=min(mini,lp[k]);
     }
     return mini;
+}
+
+string longest_pall(string s)
+{
+    string revs=s;
+    int size=s.size();
+    reverse(revs.begin(),revs.end());
+    string temp=s+"|"+revs;
+    vector<int> suff=suffix_array(temp);
+    vector<int> lp=kasai(suff,s);
+    int len=1;
+    int index=suff[0];
+    for(int i=1;i<suff.size();i++)
+    {
+        if((suff[i]<size && suff[i-1]>size) || (suff[i-1]<size && suff[i]>size))
+        {
+            if(lp[i]>len)
+            {
+                len=lp[i];
+                index=suff[i];
+            }
+        }
+    }
+
+    return temp.substr(index,len);
 }
