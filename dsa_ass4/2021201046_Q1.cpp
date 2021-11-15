@@ -14,24 +14,28 @@ class suffix
         return this->rank<a.rank;
     }
 };
-vector<int> sa;
-vector<int> lp;
+
+
 
 vector<int> suffix_array(string s);
 vector<int> kasai(vector<int> &sa,string s);
 string longest_pall(string s);
-
-int lcp(int i,int j);
+int longest_subst(string s);
+int lcp(int i,int j,string s);
+string cyclic_rotation(string s);
 
 int main()
 {
     string s;
     cin>>s;
-    sa=suffix_array(s);
-    lp=kasai(sa,s);
-
+    
+    //lp=kasai(sa,s);
+    string a=cyclic_rotation(s);
+    cout<<a<<endl;
+    int b=longest_subst(s);
+    cout<<b<<endl;
     string c=longest_pall(s);
-    cout<<c;
+    cout<<c<<endl;
     // for(int i=0;i<sa.size();i++)
     // {
     //     cout<<s.substr(sa[i])<<endl;
@@ -120,14 +124,22 @@ vector<int> kasai(vector<int> &sa,string s)
     return lp;
 }
 
-int lcp(int i, int j)
+int lcp(int i, int j, string s)
 {
-    int mini=INT_MAX;
-    for(int k=i+1;k<=j;k++)
+    if(s[i]!=s[j])
+        return -1;
+    else
     {
-        mini=min(mini,lp[k]);
+        int ans=0;
+        int size=s.length();
+        while(i<size  && j<size && s[i]==s[j])
+        {
+            ans++;
+            i++;
+            j++;
+        }
+        return ans;
     }
-    return mini;
 }
 
 string longest_pall(string s)
@@ -137,7 +149,7 @@ string longest_pall(string s)
     reverse(revs.begin(),revs.end());
     string temp=s+"|"+revs;
     vector<int> suff=suffix_array(temp);
-    vector<int> lp=kasai(suff,s);
+    vector<int> lp=kasai(suff,temp);
     int len=1;
     int index=suff[0];
     for(int i=1;i<suff.size();i++)
@@ -153,4 +165,45 @@ string longest_pall(string s)
     }
 
     return temp.substr(index,len);
+}
+
+
+int longest_subst(string s)
+{   
+    int k;
+    cin>>k;
+    vector<int> sa=suffix_array(s);
+    int ans=-1;
+    for(int i=0;i+k-1<sa.size();i++)
+    {
+        int start=sa[i];
+        int end=sa[i+k-1];
+        int temp=lcp(start,end,s);
+        ans=max(ans,temp);
+    }
+
+    return ans;
+}
+
+
+string cyclic_rotation(string s)
+{
+    
+    int size=s.size();
+    string temp=s+s;
+    vector<int> suff=suffix_array(temp);
+    //vector<int> lp=kasai(suff,temp);
+    
+    int index=suff[0];
+    for(int i=0;i<suff.size();i++)
+    {
+        if(suff[i]<size)
+        {
+            index=i;
+            break;
+        }
+
+    }
+
+    return temp.substr(index,size);   
 }
