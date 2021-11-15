@@ -66,7 +66,7 @@ class heap
 
     void build_heap()
     {
-        for(long long int i=size/2;i>=0;i--)
+        for(long long int i=(size-1)/2;i>=0;i--)
             heapify(i);
     }
 
@@ -74,6 +74,34 @@ class heap
     {
         heap_arr[0]=val;
         heapify(0);
+    }
+
+    node extract_min()
+    {
+        node ans=heap_arr[0];
+        heap_arr[0]=heap_arr[size-1];
+        size--;
+        heapify(0);
+        return ans;
+    }
+    void tricle_up(long long int i)
+    {
+        long long int parent =(i-1)/2;
+        if(parent<0)
+            return;
+        if(heap_arr[parent].num>heap_arr[i].num)
+        {
+            node temp=heap_arr[i];
+            heap_arr[i]=heap_arr[parent];
+            heap_arr[parent]=temp;
+            tricle_up(parent);
+        }
+    }
+    void insert(node val)
+    {
+        heap_arr[size]=val;
+        size++;
+        tricle_up(size-1);    
     }
 
     ~heap()
@@ -95,7 +123,7 @@ void delete_file();
 
 int main(int argc, char *argv[])
 {
-    int file_size=500000;
+    int file_size=10000000;
     solve(argv[1],argv[2],file_size);
 
 }
@@ -193,7 +221,7 @@ void merge_sort_file(char * input,long long int file_size)
                 more_file = false;
                 break;
             }
-            cout<<arr[i]<<endl;
+            //cout<<arr[i]<<endl;
             actual_size++;
         }
         if(actual_size==0) // Checking if the file is empty
@@ -204,7 +232,7 @@ void merge_sort_file(char * input,long long int file_size)
 
         // Creating name for temp file
         num_of_file++;
-        string file_name="temp"+to_string(num_of_file);
+        string file_name="temp"+to_string(num_of_file)+".txt";
         lof.push_back(file_name);
 
         // Sorting the array
@@ -277,7 +305,7 @@ void merge_file(char *output,long long int file_size)
         {
             break;
         }
-        cout<<num<<endl;
+        //cout<<num<<endl;
         h.insert(i,num,i);
     }
 
@@ -285,10 +313,10 @@ void merge_file(char *output,long long int file_size)
 
     while(nofc!=num_of_file)
     {
-        node min=h.heap_arr[0];
-        fprintf(out,"%lld,", min.num);
+        node mini=h.extract_min();
+        fprintf(out,"%lld,", mini.num);
         
-        int file_num=min.file_num;
+        int file_num=mini.file_num;
 
         long long int num;
         node new_val;
@@ -298,13 +326,16 @@ void merge_file(char *output,long long int file_size)
         {
             new_val.num=num;
             new_val.file_num=file_num;
+            h.insert(new_val);
         }
         
-        h.rebuild_heap(new_val);
+        
+        
     }
     // close input and output files
     for (int i = 0; i < num_of_file; i++)
         fclose(in[i]);
  
     fclose(out);
+    //cout<<nofc;
 }
