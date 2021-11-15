@@ -143,12 +143,16 @@ string cyclic_rotation(string s)
     vector<int> suff=suffix_array(temp);
     //vector<int> lp=kasai(suff,temp);
     
-    int index=suff[0];
+    int index;
+    // for(int i=0;i<suff.size();i++)
+    //     cout<<temp.substr(suff[i])<<" "<<suff[i]<<endl;
+    //cout<<s.substr(suff[0],size);
+    //cout<<temp.substr(suff[0]);
     for(int i=0;i<suff.size();i++)
     {
         if(suff[i]<size)
         {
-            index=i;
+            index=suff[i];
             break;
         }
 
